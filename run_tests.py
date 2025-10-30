@@ -14,7 +14,7 @@ import subprocess
 import sys
 
 
-def run_tests(args):
+def run_tests(args) -> None:
     """Run pytest with the specified arguments."""
     cmd = ["python", "-m", "pytest"]
 
@@ -46,7 +46,7 @@ def run_tests(args):
         sys.exit(result.returncode)
 
 
-def main():
+def main() -> None:
     """Main function."""
     parser = argparse.ArgumentParser(description="Test runner for URL Shortener API")
     parser.add_argument(

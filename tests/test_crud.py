@@ -8,7 +8,6 @@ class TestUserCRUD:
     """Test user CRUD operations."""
 
     @pytest.mark.asyncio
-
     async def test_create_user_success(self, db_session: AsyncSession):
         """Test successful user creation."""
         user_data = schemas.UserCreate(
@@ -23,7 +22,6 @@ class TestUserCRUD:
         assert user.hashed_password != user_data.password  # Should be hashed
 
     @pytest.mark.asyncio
-
     async def test_create_user_duplicate_username(self, db_session: AsyncSession):
         """Test creating user with duplicate username."""
         user_data = schemas.UserCreate(
@@ -42,7 +40,6 @@ class TestUserCRUD:
             await crud.create_user(db_session, duplicate_data)
 
     @pytest.mark.asyncio
-
     async def test_create_user_duplicate_email(self, db_session: AsyncSession):
         """Test creating user with duplicate email."""
         user_data = schemas.UserCreate(
@@ -61,7 +58,6 @@ class TestUserCRUD:
             await crud.create_user(db_session, duplicate_data)
 
     @pytest.mark.asyncio
-
     async def test_authenticate_user_success(self, db_session: AsyncSession):
         """Test successful user authentication."""
         user_data = schemas.UserCreate(
@@ -80,7 +76,6 @@ class TestUserCRUD:
         assert authenticated_user.id == created_user.id
 
     @pytest.mark.asyncio
-
     async def test_authenticate_user_with_email(self, db_session: AsyncSession):
         """Test user authentication with email."""
         user_data = schemas.UserCreate(
@@ -99,7 +94,6 @@ class TestUserCRUD:
         assert authenticated_user.id == created_user.id
 
     @pytest.mark.asyncio
-
     async def test_authenticate_user_wrong_password(self, db_session: AsyncSession):
         """Test authentication with wrong password."""
         user_data = schemas.UserCreate(
@@ -117,7 +111,6 @@ class TestUserCRUD:
         assert authenticated_user is None
 
     @pytest.mark.asyncio
-
     async def test_authenticate_user_nonexistent(self, db_session: AsyncSession):
         """Test authentication with non-existent user."""
         authenticated_user = await crud.authenticate_user(
@@ -131,7 +124,6 @@ class TestURLCRUD:
     """Test URL CRUD operations."""
 
     @pytest.mark.asyncio
-
     async def test_create_url_success(self, db_session: AsyncSession):
         """Test successful URL creation."""
         url_data = schemas.URLCreate(original_url="https://www.example.com")
@@ -144,7 +136,6 @@ class TestURLCRUD:
         assert url.clicks == 0
 
     @pytest.mark.asyncio
-
     async def test_create_url_with_user(self, db_session: AsyncSession):
         """Test creating URL with user association."""
         # Create user first
@@ -161,7 +152,6 @@ class TestURLCRUD:
         assert url.user_id == user.id
 
     @pytest.mark.asyncio
-
     async def test_get_url_by_short_code_success(self, db_session: AsyncSession):
         """Test getting URL by short code."""
         url_data = schemas.URLCreate(original_url="https://www.example.com")
@@ -176,14 +166,12 @@ class TestURLCRUD:
         assert retrieved_url.short_code == created_url.short_code
 
     @pytest.mark.asyncio
-
     async def test_get_url_by_short_code_not_found(self, db_session: AsyncSession):
         """Test getting non-existent URL by short code."""
         url = await crud.get_url_by_short_code(db_session, "nonexistent")
         assert url is None
 
     @pytest.mark.asyncio
-
     async def test_get_urls_by_user(self, db_session: AsyncSession):
         """Test getting URLs by user."""
         # Create user
@@ -205,7 +193,6 @@ class TestURLCRUD:
             assert url.user_id == user.id
 
     @pytest.mark.asyncio
-
     async def test_increment_click_count(self, db_session: AsyncSession):
         """Test incrementing URL click count."""
         url_data = schemas.URLCreate(original_url="https://www.example.com")
@@ -219,10 +206,10 @@ class TestURLCRUD:
 
         # Get updated URL
         updated_url = await crud.get_url_by_short_code(db_session, url.short_code)
+        assert updated_url is not None
         assert updated_url.clicks == 1
 
     @pytest.mark.asyncio
-
     async def test_update_url_success(self, db_session: AsyncSession):
         """Test updating URL."""
         # Create user
@@ -243,7 +230,6 @@ class TestURLCRUD:
         assert updated_url.original_url == updated_data.original_url
 
     @pytest.mark.asyncio
-
     async def test_update_url_not_found(self, db_session: AsyncSession):
         """Test updating non-existent URL."""
         updated_data = schemas.URLCreate(original_url="https://www.updated.com")
@@ -252,7 +238,6 @@ class TestURLCRUD:
         assert updated_url is None
 
     @pytest.mark.asyncio
-
     async def test_delete_url_by_user_success(self, db_session: AsyncSession):
         """Test deleting URL by user."""
         # Create user
@@ -275,7 +260,6 @@ class TestURLCRUD:
         assert deleted_url is None
 
     @pytest.mark.asyncio
-
     async def test_delete_url_by_user_not_found(self, db_session: AsyncSession):
         """Test deleting non-existent URL by user."""
         success = await crud.delete_url_by_user(db_session, 999, 1)

@@ -40,7 +40,7 @@ app.include_router(shortener.router, prefix="/api/v1")
 
 
 @app.get("/")
-async def root():
+async def root() -> dict[str, str]:
     return {"message": "URL Shortener API", "version": "0.1.0"}
 
 

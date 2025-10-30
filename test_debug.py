@@ -2,7 +2,7 @@ import pytest
 
 
 @pytest.mark.asyncio
-async def simple_test():
+async def simple_test() -> None:
     """Simple test to debug pytest-asyncio issue."""
     assert True
 

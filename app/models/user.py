@@ -42,5 +42,5 @@ class User(Base):
         """Verify the user's password"""
         return check_password_hash(self.hashed_password, password)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<User(username={self.username}, email={self.email})>"

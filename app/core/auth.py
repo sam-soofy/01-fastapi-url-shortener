@@ -1,14 +1,15 @@
+import os
 from datetime import datetime, timedelta
 from typing import Optional
+
 import jwt
 from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-import os
-from app.database import get_db
-from app import models
 
+from app import models
+from app.database import get_db
 
 # JWT Configuration
 SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-change-in-production")
@@ -52,7 +53,7 @@ async def get_current_user(
     """Get current authenticated user from JWT token"""
     payload = verify_token(credentials.credentials)
 
-    username: str = payload.get("sub")
+    username = payload.get("sub")
     if username is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

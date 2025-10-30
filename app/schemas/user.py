@@ -1,8 +1,10 @@
-from pydantic import BaseModel, Field, EmailStr, field_validator
-from typing import Optional
-from datetime import datetime
-from .url import URLResponse
 import re
+from datetime import datetime
+from typing import Optional
+
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+
+from .url import URLResponse
 
 
 class UserBase(BaseModel):
@@ -54,15 +56,13 @@ class UserResponse(UserBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserWithUrls(UserResponse):
     urls: list[URLResponse] = []
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Token(BaseModel):

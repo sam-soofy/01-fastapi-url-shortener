@@ -45,7 +45,7 @@ async def db_session() -> AsyncGenerator[AsyncSession, None]:
 def client(db_session: AsyncSession):
     """Create a test client with database dependency override."""
 
-    def override_get_db():
+    def override_get_db() -> AsyncSession:
         return db_session
 
     app.dependency_overrides[get_db] = override_get_db
@@ -57,7 +57,7 @@ def client(db_session: AsyncSession):
 
 
 @pytest.fixture
-def test_user_data():
+def test_user_data() -> dict[str, str]:
     """Test user data for registration."""
     return {
         "username": "testuser",
@@ -84,6 +84,6 @@ def auth_headers(client, test_user_data: dict) -> dict:
 
 
 @pytest.fixture
-def test_url_data():
+def test_url_data() -> dict[str, str]:
     """Test URL data for creating short URLs."""
     return {"original_url": "https://www.example.com"}
