@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 import logging
-from app.routers import shortener
+from app.routers import shortener, auth
 from app.database import engine
 from app.models import Base
 
@@ -26,6 +26,8 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# Include routers
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(shortener.router, prefix="/api/v1")
 
 @app.get("/")
