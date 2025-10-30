@@ -13,8 +13,8 @@ RUN pip install uv
 # Copy dependency files
 COPY pyproject.toml ./
 
-# Install dependencies
-RUN uv sync --no-install-project
+# Install dependencies and project
+RUN uv sync
 
 # Copy source code
 COPY . .

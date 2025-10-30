@@ -11,10 +11,13 @@ router = APIRouter(tags=["Authentication"])
 logger = logging.getLogger(__name__)
 
 
-@router.post("/register", response_model=schemas.UserResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register",
+    response_model=schemas.UserResponse,
+    status_code=status.HTTP_201_CREATED,
+)
 async def register_user(
-    user_data: schemas.UserCreate,
-    db: AsyncSession = Depends(get_db)
+    user_data: schemas.UserCreate, db: AsyncSession = Depends(get_db)
 ):
     """
     Register a new user.
@@ -32,22 +35,18 @@ async def register_user(
     except ValueError as e:
         # Handle duplicate username/email
         logger.warning(f"Registration failed: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except Exception as e:
         logger.error(f"Error registering user: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Internal server error"
+            detail="Internal server error",
         )
 
 
 @router.post("/login", response_model=schemas.Token)
 async def login_user(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: AsyncSession = Depends(get_db)
+    form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)
 ):
     """
     Authenticate user and return access token.
@@ -79,13 +78,13 @@ async def login_user(
         logger.error(f"Error during login: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Internal server error"
+            detail="Internal server error",
         )
 
 
 @router.get("/me", response_model=schemas.UserResponse)
 async def get_current_user_profile(
-    current_user: models.User = Depends(get_current_active_user)
+    current_user: models.User = Depends(get_current_active_user),
 ):
     """
     Get current user's profile information.
@@ -98,14 +97,14 @@ async def get_current_user_profile(
         logger.error(f"Error getting user profile: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Internal server error"
+            detail="Internal server error",
         )
 
 
 @router.get("/me/urls", response_model=schemas.UserWithUrls)
 async def get_current_user_urls(
     current_user: models.User = Depends(get_current_active_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     """
     Get current user's URLs with details.
@@ -117,8 +116,7 @@ async def get_current_user_urls(
         user_with_urls = await crud.get_user_with_urls(db, current_user.id)
         if not user_with_urls:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
             )
         return user_with_urls
 
@@ -128,5 +126,5 @@ async def get_current_user_urls(
         logger.error(f"Error getting user URLs: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Internal server error"
+            detail="Internal server error",
         )

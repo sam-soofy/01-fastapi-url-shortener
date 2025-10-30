@@ -8,7 +8,8 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgres//
+      # - DATABASE_URL=postgres//
+      - DATABASE_URL=postgresql+asyncpg://violet:toorpass@localhost:54320/url_shortener
     volumes:
       - .:/app
       - /app/__pycache__

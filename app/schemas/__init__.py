@@ -1,12 +1,13 @@
+from .analytics import AnalyticsSummary, URLClickResponse
 from .url import URLCreate, URLResponse, URLStats
 from .user import (
+    Token,
+    TokenData,
     UserBase,
     UserCreate,
     UserLogin,
     UserResponse,
     UserWithUrls,
-    Token,
-    TokenData
 )
 
 __all__ = [
@@ -21,5 +22,8 @@ __all__ = [
     "UserResponse",
     "UserWithUrls",
     "Token",
-    "TokenData"
+    "TokenData",
+    # Analytics schemas
+    "AnalyticsSummary",
+    "URLClickResponse",
 ]
